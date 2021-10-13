@@ -20,64 +20,59 @@ class Sorts {
     	void mergeArr(std::vector<T>&, std::vector<T>&, int, int, int);
 	    void mergeSplit(std::vector<T>&, std::vector<T>&, int, int);
     public:
-        int busqSecuencial(std::vector<int>, int val);
-        int busqBinaria(std::vector<int>, int val);
-        std::vector<T> ordenaSeleccion(const std::vector<T>&);
-        std::vector<T> ordenaBurbuja(const std::vector<T>&);
-        std::vector<T> ordenaMerge(const std::vector<T>&);
+        int busqSecuencial(std::vector<T>, int val);
+        int busqBinaria(std::vector<T>, int val);
+        void ordenaSeleccion(std::vector<T>&);
+        void ordenaBurbuja(std::vector<T>&);
+        void ordenaMerge(std::vector<T>&);
 };
 
 template <class T>
-void Sorts<T>::switcheroo(std::vector<T> &sarr, int i, int j) {
-	T aux = sarr[i];
-	sarr[i] = sarr[j];
-	sarr[j] = aux;
+void Sorts<T>::switcheroo(std::vector<T> &arr, int i, int j) {
+	T aux = arr[i];
+	arr[i] = arr[j];
+	arr[j] = aux;
 };
 
 template <class T>
-std::vector<T> Sorts<T>::ordenaBurbuja(const std::vector<T> &arr){
-    std::vector<T> sarr(arr);
-
-    for (int i = sarr.size() - 1; i > 0; i--){
-        for (int j = 0; j < i; j++){
-            if (sarr[j] > sarr[j+1]){
-                switcheroo(sarr, j, j+1);
+void Sorts<T>::ordenaBurbuja(std::vector<T> &arr){
+    for (size_t i = arr.size() - 1; i > 0; i--){
+        for (size_t j = 0; j < i; j++){
+            if (arr[j] > arr[j+1]){
+                switcheroo(arr, j, j+1);
             };
         };
     };
-    return sarr;
 };
 
 template <class T>
-std::vector<T> Sorts<T>::ordenaSeleccion(const std::vector<T> &arr){
-    std::vector<T> sarr(arr);
+void Sorts<T>::ordenaSeleccion(std::vector<T> &arr){
     int pos;
 
-    for (int i = sarr.size()-1; i>0; i--){
+    for (size_t i = arr.size()-1; i>0; i--){
         pos = 0;
-        for (int j = 1; j <= i; j++){
-            if (sarr[j] > sarr[pos]){
+        for (size_t j = 1; j <= i; j++){
+            if (arr[j] > arr[pos]){
                 pos = j;
             };
         };
 
         if (pos != i){
-            switcheroo(sarr, i ,pos);
+            switcheroo(arr, i ,pos);
         };
     };
-    return sarr;
 };
 
 template <class T>
 void Sorts<T>::copiarArr(std::vector<T> &A, std::vector<T> &B, int L, int H) {
-	for (int i = L; i <= H; i++) {
+	for (size_t i = L; i <= H; i++) {
 		A[i] = B[i];
 	};
 };
 
 template <class T>
 void Sorts<T>::mergeArr(std::vector<T> &A, std::vector<T> &B, int L, int hal, int H) {
-	int i, j, k;
+	size_t i, j, k;
 
 	i = L;
 	j = hal + 1;
@@ -106,29 +101,25 @@ void Sorts<T>::mergeArr(std::vector<T> &A, std::vector<T> &B, int L, int hal, in
 
 template <class T>
 void Sorts<T>::mergeSplit(std::vector<T> &A, std::vector<T> &B, int L, int H) {
-	int hal;
-
 	if ((H - L) < 1) {
 		return; // Verifica si ya no se puede separar en mitades
 	}
-	hal = (H + L) / 2;
+	int hal = (H + L) / 2;
 	mergeSplit(A, B, L, hal); // Agarra la primera mitad del array A para ordenarlo en B
-	mergeSplit(A, B, hal + 1, H); // Agarra la segunda mitad del array A para ordenarlo en B
+	mergeSplit(A, B, (hal + 1), H); // Agarra la segunda mitad del array A para ordenarlo en B
 	mergeArr(A, B, L, hal, H); // Combina los arrays 
 	copiarArr(A, B, L, H); // Copia los valores de B hacia A
 };
 
 template <class T>
-std::vector<T> Sorts<T>::ordenaMerge(const std::vector<T> &arr){
-    std::vector<T> sarr(arr);
-    std::vector<T> tarr(sarr.size());
-    mergeSplit(sarr,tarr, 0, sarr.size() - 1);
-    return sarr;
+void Sorts<T>::ordenaMerge(std::vector<T> &arr){
+    std::vector<T> tarr(arr.size());
+    mergeSplit(arr,tarr, 0, (arr.size() - 1));
 };
 
 template <class T>
-int Sorts<T>::busqSecuencial(std::vector<int> arr, int val) {
-    for (int i=0;i<arr.size()-1;i++){
+int Sorts<T>::busqSecuencial(std::vector<T> arr, int val) {
+    for (int i=0;i<arr.size();i++){
         if (val == arr[i]){
             return i;
         };
@@ -137,7 +128,7 @@ int Sorts<T>::busqSecuencial(std::vector<int> arr, int val) {
 };
 
 template <class T>
-int Sorts<T>::busqBinaria(std::vector<int> arr, int val) {
+int Sorts<T>::busqBinaria(std::vector<T> arr, int val) {
     int hal;
     int L = 0;
     int H = arr.size() - 1;
