@@ -1,8 +1,16 @@
+/*
+ *  list.h
+ *
+ *  Created on: 08/11/2021
+ *  José Sebastián Pedrero Jiménez
+ */
+
 #ifndef LIST_H
 #define LIST_H
 
 #include <string>
 #include <sstream>
+#include <iostream>
 #include "node.h"
 
 template <class T>
@@ -23,8 +31,6 @@ public:
 	void push_front(T);
 	void insertion(T);
 	void update(int, T);
-	T    pop_front();
-	T 	 pop_back();
 	T    deleteAt(int);
 	long int  search(T) const;
 };
@@ -126,6 +132,7 @@ void List<T>::insertion(T val) {
 
 	if (empty()) {
 		push_front(val);
+		return;
 	}
 
 	p = head;
@@ -142,39 +149,37 @@ void List<T>::insertion(T val) {
 template <class T>
 void List<T>::update(int index,T val) {
 		deleteAt(index);
-		int l = 1;
 		Node<T> *p, *q;
 		p=head;
-		p=p->next;
 		q=p->next;
-		while(l+1 != index) {
+		for (int i = 1; i < index; i++){
 			p = p->next;
 			q = q->next;
-			l++;
 		}
+		p->next=q;
 		p->next = new Node<T>(val);
 		p = p->next;
 		p->next = q;
 		size++;
 }
 
-
 template <class T>
 T List<T>::deleteAt(int index) {
 	T k;
-	int l = 1;
 	Node<T> *p, *q;
 	p=head;
-	p=p->next;
-	q=p->next;
-	while(l+1 != index) {
+	q=p->next;	
+	if (index == 0){
+		head=q;
+		delete p;
+		return k;
+	}
+	for (int i = 1; i < index; i++){
 		p = p->next;
 		q = q->next;
-		l++;
 	}
-	k = q->value;
-	delete q;
 	p->next=q->next;
+	delete q;
 	size--;
 	return k;
 }
